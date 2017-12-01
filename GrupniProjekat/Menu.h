@@ -29,7 +29,7 @@ public:
 
 private:
 	GroupOfStudents gs;
-
+	string filename, type, path;
 public:
 	Menu();
 
@@ -40,6 +40,7 @@ public:
 	void displayStudents() const;
 	void displayStudentsSorted() const;
 	void displayHighestScore() const;
+	void writeStudents();
 };
 
 #endif

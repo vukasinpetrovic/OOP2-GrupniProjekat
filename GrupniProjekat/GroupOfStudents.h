@@ -29,6 +29,9 @@ public:
 	void displaySorted();
 	void displayHighest();
 	void writeToFile();
+
+	friend ofstream& operator<< (ofstream& ofs, const GroupOfStudents& gs);
+	friend ifstream& operator>> (ifstream& ifs, GroupOfStudents& gs);
 };
 
 #endif

@@ -37,12 +37,18 @@ ofstream& operator<< (ofstream& ofs, const Courses& cs) {
 ifstream& operator>> (ifstream& ifs, Courses& cs) {
 	for (int i = 0; i < cs.NUM_HW; i++) {
 		ifs >> cs.homework[i];
+		if (ifs.bad())
+			throw invalid_argument("Invalid argument!");
 	}
 	for (int i = 0; i < cs.NUM_TESTS; i++) {
 		ifs >> cs.test[i];
+		if (ifs.bad())
+			throw invalid_argument("Invalid argument!");
 	}
 	for (int i = 0; i < cs.NUM_QUIZZES; i++) {
 		ifs >> cs.quiz[i];
+		if (ifs.bad())
+			throw invalid_argument("Invalid argument!");
 	}
 	return ifs;
 }

@@ -29,11 +29,21 @@ void StudentCourses::display() {
 }
 
 ofstream& operator<< (ofstream& ofs, const StudentCourses& sc) {
-	ofs << sc.student << sc.course;
+	try {
+		ofs << sc.student << sc.course;
+	}
+	catch (const std::exception&) {
+		throw invalid_argument("Invalid argument!");
+	}
 	return ofs;
 }
 
 ifstream& operator>> (ifstream& ifs, StudentCourses& sc) {
-	ifs >> sc.student >> sc.course;
+	try {
+		ifs >> sc.student >> sc.course;
+	}
+	catch (const std::exception&) {
+		throw invalid_argument("Invalid argument!");
+	}
 	return ifs;
 }

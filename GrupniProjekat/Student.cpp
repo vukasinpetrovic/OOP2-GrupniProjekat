@@ -53,5 +53,7 @@ ofstream& operator<< (ofstream& ofs, const Student& st) {
 
 ifstream& operator>> (ifstream& ifs, Student& st) {
 	ifs >> st.firstName >> st.lastName >> st.ID;
+	if(ifs.bad())
+		throw invalid_argument("Invalid argument!");
 	return ifs;
 }

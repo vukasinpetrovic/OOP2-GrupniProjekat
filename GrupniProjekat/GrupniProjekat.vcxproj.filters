@@ -36,9 +36,6 @@
     <ClInclude Include="StudentCourses.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StudentCoursesManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -60,9 +57,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StudentCourses.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StudentCoursesManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
