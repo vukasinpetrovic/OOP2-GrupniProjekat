@@ -23,13 +23,6 @@ public:
 	static const int NUM_TESTS = 4;
 
 private:
-	// this will not compile
-	// non-integral constants must be initialized in Courses.cpp
-	// with these values 0.05, 0.5, 0.45
-	static const double QUIZ_WEIGHT;
-	static const double HOMEWORK_WEIGHT;
-	static const double TEST_WEIGHT;
-
 	// private data
 	vector<int> quiz;
 	vector<int> homework;

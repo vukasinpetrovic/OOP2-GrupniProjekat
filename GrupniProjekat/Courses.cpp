@@ -14,6 +14,10 @@
 
 using namespace std;
 
+static const double QUIZ_WEIGHT = 0.05;
+static const double HOMEWORK_WEIGHT = 0.5;
+static const double TEST_WEIGHT = 0.45;
+
 void Courses::display() const {
 	cout << "Konacan broj bodova: " << finalScore << ", ocena: " << letterGrade << endl;
 }

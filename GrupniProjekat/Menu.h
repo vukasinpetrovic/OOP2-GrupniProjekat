@@ -34,11 +34,14 @@ public:
 	Menu();
 
 	bool isIdValid(string id) const;
+	void enterStudentID() const;
 	void displayMenu() const;
 	void displayInfo() const;
 	void displayStudents() const;
 	void displayStudentsSorted() const;
 	void displayHighestScore() const;
+	void setArguments(string filename, string type, string path);
+	GroupOfStudents getGS();
 };
 
 #endif
