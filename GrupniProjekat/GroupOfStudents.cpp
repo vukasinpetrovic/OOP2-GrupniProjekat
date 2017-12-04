@@ -13,10 +13,6 @@ GroupOfStudents::GroupOfStudents(const vector< StudentCourses >& v) {
 	this->stVec = v;
 }
 
-void GroupOfStudents::searchForHighest(vector<int>& indices_max) const {
-
-}
-
 void GroupOfStudents::display() {
 	for (int i = 0; i < stVec.size(); i++) {
 		stVec.at(i).display();
@@ -30,11 +26,8 @@ void GroupOfStudents::displaySorted() {
 	}
 }
 
-void GroupOfStudents::displayHighest() {
-	searchForHighest();
-	for (int i = 0; i < stVec.size(); i++) {
-		if (stVec.at(i).getFinalScore() >= max) stVec.at(i).display;
-	}
+void GroupOfStudents::displayHighest() const {
+	
 }
 
 void merge(vector<StudentCourses> students, int leftIndex, int middleIndex, int rightIndex)
@@ -121,6 +114,79 @@ void mergeSort(vector<StudentCourses> courses, int leftIndex, int rightIndex)
 
 		merge(courses, leftIndex, middleIndex, rightIndex);
 	}
+}
+
+const vector<StudentCourses>& GroupOfStudents::getStudentCourses() const {
+	return stVec;
+}
+
+void GroupOfStudents::readFile() {
+	ifstream ifs;
+	cout << "Ime datoteke: ";
+	cin >> filename;
+	cout << "Tip datoteke (txt ili bin): ";
+	cin >> type;
+	cout << "Putanja datoteke: ";
+	cin >> path;
+
+	try {
+		if (!type.compare("txt")) {
+			ifs.open(path + "\output" + filename + type);
+		}
+		else if (!type.compare("bin")) {
+			ifs.open(path + "\output" + filename + type, ios::binary);
+		}
+	}
+	catch (const std::exception&) {
+		throw exception("Greska pri otvaranju fajla!");
+	}
+
+	while (!ifs.eof()) {
+		StudentCourses sc;
+		try {
+			ifs >> sc;
+			stVec.push_back(sc);
+		}
+		catch (const std::exception&) {
+			throw invalid_argument("Invalid argument!");
+		}
+	}
+	ifs.close();
+}
+
+void GroupOfStudents::writeToFile() {
+	ofstream ofs;
+
+	try {
+		if (!type.compare("txt")) {
+			ofs.open(path + "\output" + filename + type);
+		}
+		else if (!type.compare("bin")) {
+			ofs.open(path + "\output" + filename + type, ios::binary);
+		}
+	}
+	catch (const std::exception&) {
+		throw exception("Greska pri otvaranju fajla!");
+	}
+
+	for (StudentCourses sc : stVec) {
+		ofs << sc;
+	}
+	ofs.close();
+
+	try {
+		if (!type.compare("bin")) {
+			ofs.open(path + "\output" + filename + ".txt");
+		}
+	}
+	catch (const std::exception&) {
+		throw exception("Greska pri otvaranju fajla!");
+	}
+
+	for (StudentCourses sc : stVec) {
+		ofs << sc;
+	}
+	ofs.close();
 }
 
 ofstream& operator<< (ofstream& ofs, const GroupOfStudents& gs) {

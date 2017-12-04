@@ -18,6 +18,7 @@ class GroupOfStudents {
 private:
 	vector<StudentCourses> stVec;
 	void searchForHighest(vector<int>& indices_max) const; // utility
+	string filename, type, path;
 
 public:
 	GroupOfStudents() {}
@@ -27,7 +28,8 @@ public:
 	const vector<StudentCourses>& getStudentCourses() const;
 	void display();
 	void displaySorted();
-	void displayHighest();
+	void displayHighest() const;
+	void readFile();
 	void writeToFile();
 
 	friend ofstream& operator<< (ofstream& ofs, const GroupOfStudents& gs);

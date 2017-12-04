@@ -36,11 +36,9 @@ public:
 	bool isIdValid(string id) const;
 	void displayMenu() const;
 	void displayInfo() const;
-	void readStudents();
 	void displayStudents() const;
 	void displayStudentsSorted() const;
 	void displayHighestScore() const;
-	void writeStudents();
 };
 
 #endif
