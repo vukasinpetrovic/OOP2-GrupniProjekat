@@ -7,6 +7,10 @@
 #include "stdafx.h"
 #include "Menu.h"
 
+void Menu::displayMenu() const {
+	cout << "Izaberite ";
+}
+
 void Menu::readStudents() {
 	ifstream ifs;
 	cout << "Ime datoteke: ";

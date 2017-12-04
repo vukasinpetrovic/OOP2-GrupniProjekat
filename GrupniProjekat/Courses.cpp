@@ -19,10 +19,34 @@ void Courses::display() const {
 }
 
 void Courses::calcFinalScore() {
+	float hwScore = 0;
+	float quizScore = 0;
+	float testScore = 0;
 
+	for (int i = 0; i < NUM_HW; i++) {
+		hwScore += homework.at(i);
+	}
+	hwScore *= HOMEWORK_WEIGHT;
+
+	for (int i = 0; i < NUM_QUIZZES; i++) {
+		quizScore += quiz.at(i);
+	}
+	quizScore *= QUIZ_WEIGHT;
+
+	for (int i = 0; i < NUM_TESTS; i++) {
+		testScore += test.at(i);
+	}
+	testScore *= TEST_WEIGHT;
+
+	finalScore = hwScore + quizScore + testScore;
 }
-void Courses::calcLetterGrade() {
 
+void Courses::calcLetterGrade() {
+	if (finalScore > 85) letterGrade = 'A';
+	else if (finalScore > 75) letterGrade = 'B';
+	else if (finalScore > 65) letterGrade = 'C';
+	else if (finalScore > 55) letterGrade = 'D';
+	else letterGrade = 'F';
 }
 
 double Courses::getFinalScore() const {
