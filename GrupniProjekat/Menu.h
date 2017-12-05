@@ -34,7 +34,7 @@ public:
 	Menu();
 
 	bool isIdValid(string id) const;
-	void enterStudentID() const;
+	void enterStudentID();
 	void displayMenu() const;
 	void displayInfo() const;
 	void displayStudents() const;

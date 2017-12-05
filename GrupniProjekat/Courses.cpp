@@ -49,17 +49,20 @@ void Courses::calcFinalScore() {
 }
 
 void Courses::calcLetterGrade() {
-	//cout << "\nFinal score = " << finalScore;
 	if (finalScore >= 85) letterGrade = 'A';
 	else if (finalScore >= 75) letterGrade = 'B';
 	else if (finalScore >= 65) letterGrade = 'C';
 	else if (finalScore >= 55) letterGrade = 'D';
 	else letterGrade = 'F';
-	//cout << " Letter grade = " << letterGrade;
 }
 
 double Courses::getFinalScore() const {
 	return finalScore;
+}
+
+void Courses::setScore(double finalScore) {
+	this->finalScore = finalScore;
+	calcLetterGrade();
 }
 
 ofstream& operator<< (ofstream& ofs, const Courses& cs) {
@@ -70,17 +73,17 @@ ofstream& operator<< (ofstream& ofs, const Courses& cs) {
 ifstream& operator>> (ifstream& ifs, Courses& cs) {
 	for (int i = 0; i < cs.NUM_HW; i++) {
 		ifs >> cs.homework[i];
-		if (ifs.bad())
+		if (ifs.bad() || cs.homework[i] < 0)
 			throw invalid_argument("Invalid argument!");
 	}
 	for (int i = 0; i < cs.NUM_TESTS; i++) {
 		ifs >> cs.test[i];
-		if (ifs.bad())
+		if (ifs.bad() || cs.test[i] < 0)
 			throw invalid_argument("Invalid argument!");
 	}
 	for (int i = 0; i < cs.NUM_QUIZZES; i++) {
 		ifs >> cs.quiz[i];
-		if (ifs.bad())
+		if (ifs.bad() || cs.quiz[i] < 0)
 			throw invalid_argument("Invalid argument!");
 	}
 	return ifs;

@@ -41,6 +41,7 @@ public:
 	void calcFinalScore();
 	void calcLetterGrade();
 	double getFinalScore() const;
+	void setScore(double finalScore);
 
 	friend ofstream& operator<< (ofstream& ofs, const Courses& cs);
 	friend ifstream& operator>> (ifstream& ifs, Courses& st);

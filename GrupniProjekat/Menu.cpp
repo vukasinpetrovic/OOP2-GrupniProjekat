@@ -37,20 +37,26 @@ bool Menu::isIdValid(string id) const {
 	return isValid;
 }
 
-void Menu::enterStudentID() const {
-	string id;
-	cout << "Unesite ID studenta: ";
-	cin >> id;
-	bool isValid = isIdValid(id);
-	cout << isValid;
-	if (isIdValid(id)) {
-		for (int i = 0; i < gs.getStudentCourses().size(); i++) {
-			if (!gs.getStudentCourses().at(i).getStudent().getId().compare(id))
-				gs.getStudentCourses().at(i).getStudent().display();
-		}
+void Menu::enterStudentID() {
+	if (gs.getStudentCourses().size() == 0) {
+		cout << "\nLista studenata je prazna.";
 	}
 	else {
-		cout << "\nNiste uneli ispravan ID (ne postoji student sa datim ID-em)!";
+		string id;
+		cout << "Unesite ID studenta: ";
+		cin >> id;
+		bool isValid = isIdValid(id);
+		if (isIdValid(id)) {
+			for (int i = 0; i < gs.getStudentCourses().size(); i++) {
+				if (!gs.getStudentCourses().at(i).getStudent().getId().compare(id)) {
+					gs.getStudentCourses().at(i).getStudent().display();
+					gs.getStudentCourses().at(i).getCourseConst().display();
+				}
+			}
+		}
+		else {
+			cout << "\nNiste uneli ispravan ID (ne postoji student sa datim ID-em)!";
+		}
 	}
 }
 
@@ -59,19 +65,34 @@ void Menu::displayInfo() const {
 }
 
 void Menu::displayStudents() const {
-	for (int i = 0; i < gs.getStudentCourses().size(); i++) {
-		gs.getStudentCourses().at(i).getStudent().display();
+	if (gs.getStudentCourses().size() == 0) {
+		cout << "\nLista studenata je prazna.";
+	}
+	else {
+		for (int i = 0; i < gs.getStudentCourses().size(); i++) {
+			gs.getStudentCourses().at(i).getStudent().display();
+		}
 	}
 }
 
 void Menu::displayStudentsSorted() const {
-	vector<StudentCourses> sorted = gs.sort();
-	for (int i = 0; i < sorted.size(); i++) {
-		sorted.at(i).getStudent().display();
+	if (gs.getStudentCourses().size() == 0) {
+		cout << "\nLista studenata je prazna.";
+	}
+	else {
+		vector<StudentCourses> sorted = gs.sort(false);
+		for (int i = 0; i < sorted.size(); i++) {
+			sorted.at(i).getStudent().display();
+		}
 	}
 }
 
 void Menu::displayHighestScore() const {
-	cout << "Studenti sa najboljim prosekom:\n";
-	gs.displayHighest();
+	if (gs.getStudentCourses().size() == 0) {
+		cout << "\nLista studenata je prazna.";
+	}
+	else {
+		cout << "Studenti sa najboljim prosekom:\n";
+		gs.displayHighest();
+	}
 }

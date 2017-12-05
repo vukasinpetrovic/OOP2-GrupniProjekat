@@ -15,7 +15,11 @@ Student StudentCourses::getStudent() const {
 	return student;
 }
 
-Courses StudentCourses::getCourse() const {
+Courses StudentCourses::getCourseConst() const {
+	return course;
+}
+
+Courses& StudentCourses::getCourse() {
 	return course;
 }
 

@@ -20,7 +20,8 @@ class StudentCourses {
 public:
 
 	Student getStudent() const;
-	Courses getCourse() const;
+	Courses getCourseConst() const;
+	Courses& getCourse();
 	double getFinalScore() const;
 	void display();
 

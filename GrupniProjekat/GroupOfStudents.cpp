@@ -42,7 +42,7 @@ void GroupOfStudents::display() {
 }
 
 void GroupOfStudents::displaySorted() {
-	mergeSort(stVec, 0, stVec.size() - 1);
+	mergeSort(stVec, 0, stVec.size() - 1, false);
 	display();
 }
 
@@ -54,7 +54,7 @@ void GroupOfStudents::displayHighest() const {
 	}
 }
 
-void GroupOfStudents::merge(vector<StudentCourses>& courses, int leftIndex, int middleIndex, int rightIndex) const {
+void GroupOfStudents::merge(vector<StudentCourses>& courses, int leftIndex, int middleIndex, int rightIndex, bool sortById) const {
 	int i, j, k;
 	int n1 = middleIndex - leftIndex + 1;
 	int n2 = rightIndex - middleIndex;
@@ -70,45 +70,63 @@ void GroupOfStudents::merge(vector<StudentCourses>& courses, int leftIndex, int 
 	i = 0; // Initial index of first subvector
 	j = 0; // Initial index of second subvector
 	k = leftIndex; // Initial index of merged subvector
-	while (i < n1 && j < n2)
-	{
-		if (leftVector.at(i).getStudent().getLastName().compare(rightVector.at(j).getStudent().getLastName()) < 0)
+	if (!sortById) {
+		while (i < n1 && j < n2)
 		{
-			courses.at(k) = leftVector.at(i);
-			i++;
-		}
-		else if (leftVector.at(i).getStudent().getLastName().compare(rightVector.at(j).getStudent().getLastName()) > 0)
-		{
-			courses.at(k) = rightVector.at(j);
-			j++;
-		}
-		else 
-		{
-			if (leftVector.at(i).getStudent().getFirstName().compare(rightVector.at(j).getStudent().getFirstName()) < 0)
+			if (leftVector.at(i).getStudent().getLastName().compare(rightVector.at(j).getStudent().getLastName()) < 0)
 			{
 				courses.at(k) = leftVector.at(i);
 				i++;
 			}
-			else if (leftVector.at(i).getStudent().getFirstName().compare(rightVector.at(j).getStudent().getFirstName()) > 0)
+			else if (leftVector.at(i).getStudent().getLastName().compare(rightVector.at(j).getStudent().getLastName()) > 0)
 			{
 				courses.at(k) = rightVector.at(j);
 				j++;
 			}
 			else
 			{
-				if (leftVector.at(i).getStudent().getId() <= rightVector.at(j).getStudent().getId())
+				if (leftVector.at(i).getStudent().getFirstName().compare(rightVector.at(j).getStudent().getFirstName()) < 0)
 				{
 					courses.at(k) = leftVector.at(i);
 					i++;
 				}
-				else
+				else if (leftVector.at(i).getStudent().getFirstName().compare(rightVector.at(j).getStudent().getFirstName()) > 0)
 				{
 					courses.at(k) = rightVector.at(j);
 					j++;
 				}
+				else
+				{
+					if (leftVector.at(i).getStudent().getId().compare(rightVector.at(j).getStudent().getId()) < 0)
+					{
+						courses.at(k) = leftVector.at(i);
+						i++;
+					}
+					else if (leftVector.at(i).getStudent().getId().compare(rightVector.at(j).getStudent().getId()) > 0)
+					{
+						courses.at(k) = rightVector.at(j);
+						j++;
+					}
+				}
 			}
+			k++;
 		}
-		k++;
+	}
+	else {
+		while (i < n1 && j < n2)
+		{
+			if (leftVector.at(i).getStudent().getId().compare(rightVector.at(j).getStudent().getId()) < 0)
+			{
+				courses.at(k) = leftVector.at(i);
+				i++;
+			}
+			else if (leftVector.at(i).getStudent().getId().compare(rightVector.at(j).getStudent().getId()) > 0)
+			{
+				courses.at(k) = rightVector.at(j);
+				j++;
+			}
+			k++;
+		}
 	}
 
 	while (i < n1)
@@ -126,92 +144,125 @@ void GroupOfStudents::merge(vector<StudentCourses>& courses, int leftIndex, int 
 	}
 }
 
-void GroupOfStudents::mergeSort(vector<StudentCourses>& courses, int leftIndex, int rightIndex) const {
+void GroupOfStudents::mergeSort(vector<StudentCourses>& courses, int leftIndex, int rightIndex, bool sortById) const {
 	if (leftIndex < rightIndex)
 	{
 		int middleIndex = leftIndex + (rightIndex - leftIndex) / 2;
 
-		mergeSort(courses, leftIndex, middleIndex);
-		mergeSort(courses, middleIndex + 1, rightIndex);
+		mergeSort(courses, leftIndex, middleIndex, sortById);
+		mergeSort(courses, middleIndex + 1, rightIndex, sortById);
 
-		merge(courses, leftIndex, middleIndex, rightIndex);
+		merge(courses, leftIndex, middleIndex, rightIndex, sortById);
 	}
 }
 
-vector<StudentCourses> GroupOfStudents::sort() const {
+vector<StudentCourses> GroupOfStudents::sort(bool sortById) const {
 	vector<StudentCourses> tmpVec;
 	for (int i = 0; i < stVec.size(); i++) tmpVec.push_back(stVec.at(i));
-	mergeSort(tmpVec, 0, tmpVec.size() - 1);
+	mergeSort(tmpVec, 0, tmpVec.size() - 1, sortById);
 	return tmpVec;
 }
 
 void GroupOfStudents::readFile() {
-	stVec.clear();
+	try {
+		stVec.clear();
+		vector<StudentCourses> tmpSC;
 
-	ifstream ifs;
+		ifstream ifs;
 
-	if (!type.compare("txt"))
-		ifs.open(filename + "." + type);
-	else if (!type.compare("bin"))
-		ifs.open(filename + "." + type, ios::binary);
+		if (!type.compare("txt"))
+			ifs.open(filename + "." + type);
+		else if (!type.compare("bin"))
+			ifs.open(filename + "." + type, ios::binary);
 
-	if (!ifs.is_open()) {
-		cerr << "Greska pri otvaranju fajla!";
-		return;
-	}
-
-	while (!ifs.eof()) {
-		StudentCourses sc;
-		ifs >> sc;
-
-		if (!ifs.fail()) {
-			sc.getCourse().calcFinalScore();
-			sc.getCourse().calcLetterGrade();
-			sc.display();
-			stVec.push_back(sc);
-		}
-		else {
-			cout << "Fajl nije ispravan!\n\n";
-			stVec.clear();
-			ifs.close();
+		if (!ifs.is_open()) {
+			cerr << "Greska pri otvaranju fajla!";
 			return;
 		}
-	}
-	ifs.close();
 
-	cout << "Citanje datoteke uspesno zavrseno.\n";
+		while (!ifs.eof()) {
+			StudentCourses sc;
+			ifs >> sc;
+
+			if (!ifs.fail()) {
+				sc.getCourse().calcFinalScore();
+				sc.getCourse().calcLetterGrade();
+				tmpSC.push_back(sc);
+			}
+			else {
+				cout << "Fajl nije ispravan!\n\n";
+				tmpSC.clear();
+				stVec.clear();
+				ifs.close();
+				return;
+			}
+		}
+		ifs.close();
+
+		while (tmpSC.size() != 0) {
+			StudentCourses sc = tmpSC.at(0);
+			double points = 0;
+			int noOfCopies = 0;
+			for (int i = tmpSC.size() - 1; i >= 0; i--) {
+				StudentCourses sc2 = tmpSC.at(i);
+				if (sc.getStudent().getFirstName() == sc2.getStudent().getFirstName()
+					&& sc.getStudent().getLastName() == sc2.getStudent().getLastName()
+					&& sc.getStudent().getId() == sc2.getStudent().getId()) {
+					points += sc2.getFinalScore();
+					noOfCopies += 1;
+					tmpSC.erase(tmpSC.begin() + i);
+				}
+			}
+			sc.getCourse().setScore(points / noOfCopies);
+			stVec.push_back(sc);
+		}
+
+		cout << "Citanje datoteke uspesno zavrseno.\n";
+	}
+	catch (const std::exception&) {
+		cout << "\nFajl nije ispravan!\n";
+	}
 }
 
 void GroupOfStudents::writeToFile() const {
-	ofstream ofs;
-
-	if (!type.compare("txt"))
-		ofs.open(path + "output." + type);
-	else if (!type.compare("bin"))
-		ofs.open(path + "output." + type, ios::binary);
-
-	if (!ofs.is_open()) {
-		cout << "Greska pri otvaranju fajla!";
-		return;
+	if (stVec.size() == 0) {
+		cout << "\nLista studenata je prazna.";
 	}
+	else {
+		vector<StudentCourses> tmpVec;
+		for (int i = 0; i < stVec.size(); i++) tmpVec.push_back(stVec.at(i));
+		mergeSort(tmpVec, 0, tmpVec.size() - 1, true);
 
-	for (StudentCourses sc : stVec) {
-		ofs << sc;
-	}
-	ofs.close();
+		ofstream ofs;
 
-	if (!type.compare("bin")) {
-		ofs.open(path + "output.txt");
+		if (!type.compare("txt"))
+			ofs.open(path + "output." + type);
+		else if (!type.compare("bin"))
+			ofs.open(path + "output." + type, ios::binary);
+
 		if (!ofs.is_open()) {
 			cout << "Greska pri otvaranju fajla!";
 			return;
 		}
-	}
 
-	for (StudentCourses sc : stVec) {
-		ofs << sc;
+		for (StudentCourses sc : tmpVec) {
+			ofs << sc;
+		}
+		ofs.close();
+
+		if (!type.compare("bin")) {
+			ofs.open(path + "output.txt");
+			if (!ofs.is_open()) {
+				cout << "Greska pri otvaranju fajla!";
+				return;
+			}
+		}
+
+		for (StudentCourses sc : tmpVec) {
+			ofs << sc;
+		}
+		ofs.close();
 	}
-	ofs.close();
 }
 
 ofstream& operator<< (ofstream& ofs, const GroupOfStudents& gs) {

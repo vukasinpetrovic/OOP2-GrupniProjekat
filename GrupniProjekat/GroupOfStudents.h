@@ -29,9 +29,9 @@ public:
 	void display();
 	void displaySorted();
 	void displayHighest() const;
-	void merge(vector<StudentCourses>& courses, int leftIndex, int middleIndex, int rightIndex) const;
-	void mergeSort(vector<StudentCourses>& courses, int leftIndex, int rightIndex) const;
-	vector<StudentCourses> sort() const;
+	void merge(vector<StudentCourses>& courses, int leftIndex, int middleIndex, int rightIndex, bool sortById) const;
+	void mergeSort(vector<StudentCourses>& courses, int leftIndex, int rightIndex, bool sortById) const;
+	vector<StudentCourses> sort(bool sortById) const;
 	void readFile();
 	void writeToFile() const;
 	void setArguments(string filename, string type, string path);
