@@ -40,8 +40,7 @@ public:
 	void displayStudents() const;
 	void displayStudentsSorted() const;
 	void displayHighestScore() const;
-	void setArguments(string filename, string type, string path);
-	GroupOfStudents getGS();
+	GroupOfStudents& getGS();
 };
 
 #endif

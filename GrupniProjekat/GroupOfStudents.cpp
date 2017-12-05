@@ -13,6 +13,12 @@ GroupOfStudents::GroupOfStudents(const vector< StudentCourses >& v) {
 	this->stVec = v;
 }
 
+void GroupOfStudents::setArguments(string filename, string type, string path) {
+	this->filename = filename;
+	this->type = type;
+	this->path = path;
+}
+
 void GroupOfStudents::searchForHighest(vector<int>& indices_max) const {
 	float max = 0;
 	for (int i = 0; i < stVec.size(); i++) {
@@ -48,7 +54,7 @@ void GroupOfStudents::displayHighest() const {
 	}
 }
 
-void GroupOfStudents::merge(vector<StudentCourses> courses, int leftIndex, int middleIndex, int rightIndex) const {
+void GroupOfStudents::merge(vector<StudentCourses>& courses, int leftIndex, int middleIndex, int rightIndex) const {
 	int i, j, k;
 	int n1 = middleIndex - leftIndex + 1;
 	int n2 = rightIndex - middleIndex;
@@ -57,7 +63,7 @@ void GroupOfStudents::merge(vector<StudentCourses> courses, int leftIndex, int m
 	vector<StudentCourses> rightVector;
 
 	for (i = 0; i < n1; i++)
-		leftVector.push_back(courses.at(middleIndex + 1 + i));
+		leftVector.push_back(courses.at(leftIndex + i));
 	for (j = 0; j < n2; j++)
 		rightVector.push_back(courses.at(middleIndex + 1 + j));
 
@@ -120,7 +126,7 @@ void GroupOfStudents::merge(vector<StudentCourses> courses, int leftIndex, int m
 	}
 }
 
-void GroupOfStudents::mergeSort(vector<StudentCourses> courses, int leftIndex, int rightIndex) const {
+void GroupOfStudents::mergeSort(vector<StudentCourses>& courses, int leftIndex, int rightIndex) const {
 	if (leftIndex < rightIndex)
 	{
 		int middleIndex = leftIndex + (rightIndex - leftIndex) / 2;
@@ -132,54 +138,61 @@ void GroupOfStudents::mergeSort(vector<StudentCourses> courses, int leftIndex, i
 	}
 }
 
-void GroupOfStudents::sort() const {
+vector<StudentCourses> GroupOfStudents::sort() const {
 	vector<StudentCourses> tmpVec;
 	for (int i = 0; i < stVec.size(); i++) tmpVec.push_back(stVec.at(i));
 	mergeSort(tmpVec, 0, tmpVec.size() - 1);
+	return tmpVec;
 }
 
 void GroupOfStudents::readFile() {
+	stVec.clear();
+
 	ifstream ifs;
 
-	try {
-		if (!type.compare("txt")) {
-			ifs.open(path + "\output" + filename + type);
-		}
-		else if (!type.compare("bin")) {
-			ifs.open(path + "\output" + filename + type, ios::binary);
-		}
-	}
-	catch (const std::exception&) {
-		throw exception("Greska pri otvaranju fajla!");
+	if (!type.compare("txt"))
+		ifs.open(filename + "." + type);
+	else if (!type.compare("bin"))
+		ifs.open(filename + "." + type, ios::binary);
+
+	if (!ifs.is_open()) {
+		cerr << "Greska pri otvaranju fajla!";
+		return;
 	}
 
 	while (!ifs.eof()) {
 		StudentCourses sc;
-		try {
-			ifs >> sc;
+		ifs >> sc;
+
+		if (!ifs.fail()) {
+			sc.getCourse().calcFinalScore();
+			sc.getCourse().calcLetterGrade();
 			sc.display();
 			stVec.push_back(sc);
 		}
-		catch (const std::exception&) {
-			throw invalid_argument("Invalid argument!");
+		else {
+			cout << "Fajl nije ispravan!\n\n";
+			stVec.clear();
+			ifs.close();
+			return;
 		}
 	}
 	ifs.close();
+
+	cout << "Citanje datoteke uspesno zavrseno.\n";
 }
 
-void GroupOfStudents::writeToFile()const  {
+void GroupOfStudents::writeToFile() const {
 	ofstream ofs;
 
-	try {
-		if (!type.compare("txt")) {
-			ofs.open(path + "\output" + filename + type);
-		}
-		else if (!type.compare("bin")) {
-			ofs.open(path + "\output" + filename + type, ios::binary);
-		}
-	}
-	catch (const std::exception&) {
-		throw exception("Greska pri otvaranju fajla!");
+	if (!type.compare("txt"))
+		ofs.open(path + "output." + type);
+	else if (!type.compare("bin"))
+		ofs.open(path + "output." + type, ios::binary);
+
+	if (!ofs.is_open()) {
+		cout << "Greska pri otvaranju fajla!";
+		return;
 	}
 
 	for (StudentCourses sc : stVec) {
@@ -187,13 +200,12 @@ void GroupOfStudents::writeToFile()const  {
 	}
 	ofs.close();
 
-	try {
-		if (!type.compare("bin")) {
-			ofs.open(path + "\output" + filename + ".txt");
+	if (!type.compare("bin")) {
+		ofs.open(path + "output.txt");
+		if (!ofs.is_open()) {
+			cout << "Greska pri otvaranju fajla!";
+			return;
 		}
-	}
-	catch (const std::exception&) {
-		throw exception("Greska pri otvaranju fajla!");
 	}
 
 	for (StudentCourses sc : stVec) {

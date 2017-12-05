@@ -11,13 +11,7 @@ Menu::Menu() {
 
 }
 
-void Menu::setArguments(string filename, string type, string path) {
-	this->filename = filename;
-	this->type = type;
-	this->path = path;
-}
-
-GroupOfStudents Menu::getGS() {
+GroupOfStudents& Menu::getGS() {
 	return gs;
 }
 
@@ -45,12 +39,18 @@ bool Menu::isIdValid(string id) const {
 
 void Menu::enterStudentID() const {
 	string id;
+	cout << "Unesite ID studenta: ";
 	cin >> id;
 	bool isValid = isIdValid(id);
+	cout << isValid;
 	if (isIdValid(id)) {
 		for (int i = 0; i < gs.getStudentCourses().size(); i++) {
-			gs.getStudentCourses().at(i).getStudent().display();
+			if (!gs.getStudentCourses().at(i).getStudent().getId().compare(id))
+				gs.getStudentCourses().at(i).getStudent().display();
 		}
+	}
+	else {
+		cout << "\nNiste uneli ispravan ID (ne postoji student sa datim ID-em)!";
 	}
 }
 
@@ -59,16 +59,15 @@ void Menu::displayInfo() const {
 }
 
 void Menu::displayStudents() const {
-	cout << "JEDI GOVNA " << gs.getStudentCourses().size();
 	for (int i = 0; i < gs.getStudentCourses().size(); i++) {
 		gs.getStudentCourses().at(i).getStudent().display();
 	}
 }
 
 void Menu::displayStudentsSorted() const {
-	gs.sort();
-	for (int i = 0; i < gs.getStudentCourses().size(); i++) {
-		gs.getStudentCourses().at(i).getStudent().display();
+	vector<StudentCourses> sorted = gs.sort();
+	for (int i = 0; i < sorted.size(); i++) {
+		sorted.at(i).getStudent().display();
 	}
 }
 

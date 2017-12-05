@@ -29,11 +29,12 @@ public:
 	void display();
 	void displaySorted();
 	void displayHighest() const;
-	void merge(vector<StudentCourses> courses, int leftIndex, int middleIndex, int rightIndex) const;
-	void mergeSort(vector<StudentCourses> courses, int leftIndex, int rightIndex) const;
-	void sort() const;
+	void merge(vector<StudentCourses>& courses, int leftIndex, int middleIndex, int rightIndex) const;
+	void mergeSort(vector<StudentCourses>& courses, int leftIndex, int rightIndex) const;
+	vector<StudentCourses> sort() const;
 	void readFile();
 	void writeToFile() const;
+	void setArguments(string filename, string type, string path);
 
 	friend ofstream& operator<< (ofstream& ofs, const GroupOfStudents& gs);
 	friend ifstream& operator>> (ifstream& ifs, GroupOfStudents& gs);
